@@ -51,6 +51,10 @@ import { getRedirectError, RedirectType } from '../../redirect'
 import { createSeededPrefetchCacheEntry } from '../prefetch-cache-utils'
 import { removeBasePath } from '../../../remove-base-path'
 import { hasBasePath } from '../../../has-base-path'
+import {
+  extractInfoFromServerReferenceId,
+  filterArgs,
+} from './server-reference-info'
 
 type FetchServerActionResult = {
   redirectLocation: URL | undefined
@@ -71,7 +75,9 @@ async function fetchServerAction(
   { actionId, actionArgs }: ServerActionAction
 ): Promise<FetchServerActionResult> {
   const temporaryReferences = createTemporaryReferenceSet()
-  const body = await encodeReply(actionArgs, { temporaryReferences })
+  const info = extractInfoFromServerReferenceId(actionId)
+  const filteredArgs = filterArgs(actionArgs, info)
+  const body = await encodeReply(filteredArgs, { temporaryReferences })
 
   const res = await fetch('', {
     method: 'POST',
