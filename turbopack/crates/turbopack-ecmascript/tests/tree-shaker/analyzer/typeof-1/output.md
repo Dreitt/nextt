@@ -161,21 +161,30 @@ graph TD
 # Final
 ```mermaid
 graph TD
-    N0["Items: [ItemId(ModuleEvaluation), ItemId(0, ImportOfModule), ItemId(1, ImportOfModule), ItemId(2, ImportOfModule)]"];
+    N0["Items: [ItemId(ModuleEvaluation)]"];
     N1["Items: [ItemId(Export((&quot;GET&quot;, #2), &quot;GET&quot;)), ItemId(3, Normal)]"];
-    N2["Items: [ItemId(0, ImportBinding(0))]"];
-    N3["Items: [ItemId(1, ImportBinding(0))]"];
-    N4["Items: [ItemId(2, ImportBinding(0))]"];
+    N2["Items: [ItemId(0, ImportOfModule)]"];
+    N3["Items: [ItemId(0, ImportBinding(0))]"];
+    N4["Items: [ItemId(1, ImportOfModule)]"];
+    N5["Items: [ItemId(1, ImportBinding(0))]"];
+    N6["Items: [ItemId(2, ImportOfModule)]"];
+    N7["Items: [ItemId(2, ImportBinding(0))]"];
+    N4 --> N2;
+    N6 --> N4;
+    N7 --> N6;
+    N1 --> N7;
+    N1 --> N5;
     N1 --> N3;
-    N1 --> N4;
-    N1 --> N2;
+    N0 --> N6;
+    N3 --> N2;
+    N5 --> N4;
 ```
 # Entrypoints
 
 ```
 {
     ModuleEvaluation: 0,
-    Exports: 5,
+    Exports: 8,
     Export(
         "GET",
     ): 1,
@@ -186,24 +195,24 @@ graph TD
 # Modules (dev)
 ## Part 0
 ```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
+};
 "module evaluation";
-import 'next/server';
-import '../../ClientComponent';
-import 'my-module/MyModuleClientComponent';
 
 ```
 ## Part 1
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 6
 };
 import { MyModuleClientComponent } from 'my-module/MyModuleClientComponent';
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
 };
 import { NextResponse } from 'next/server';
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 4
 };
 import { ClientComponent } from '../../ClientComponent';
 export { GET };
@@ -220,8 +229,16 @@ export { GET as a } from "__TURBOPACK_VAR__" assert {
 ```
 ## Part 2
 ```js
+import 'next/server';
+
+```
+## Part 3
+```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
 };
 import { NextResponse } from 'next/server';
 export { NextResponse as b } from "__TURBOPACK_VAR__" assert {
@@ -229,10 +246,21 @@ export { NextResponse as b } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 3
+## Part 4
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
+};
+import '../../ClientComponent';
+
+```
+## Part 5
+```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 4
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 4
 };
 import { ClientComponent } from '../../ClientComponent';
 export { ClientComponent as c } from "__TURBOPACK_VAR__" assert {
@@ -240,10 +268,21 @@ export { ClientComponent as c } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 4
+## Part 6
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 4
+};
+import 'my-module/MyModuleClientComponent';
+
+```
+## Part 7
+```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
 };
 import { MyModuleClientComponent } from 'my-module/MyModuleClientComponent';
 export { MyModuleClientComponent as d } from "__TURBOPACK_VAR__" assert {
@@ -251,7 +290,7 @@ export { MyModuleClientComponent as d } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 5
+## Part 8
 ```js
 export { GET } from "__TURBOPACK_PART__" assert {
     __turbopack_part__: "export GET"
@@ -260,9 +299,9 @@ export { GET } from "__TURBOPACK_PART__" assert {
 ```
 ## Merged (module eval)
 ```js
-import 'next/server';
-import '../../ClientComponent';
-import 'my-module/MyModuleClientComponent';
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
+};
 "module evaluation";
 
 ```
@@ -271,7 +310,7 @@ import 'my-module/MyModuleClientComponent';
 ```
 {
     ModuleEvaluation: 0,
-    Exports: 5,
+    Exports: 8,
     Export(
         "GET",
     ): 1,
@@ -282,24 +321,24 @@ import 'my-module/MyModuleClientComponent';
 # Modules (prod)
 ## Part 0
 ```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
+};
 "module evaluation";
-import 'next/server';
-import '../../ClientComponent';
-import 'my-module/MyModuleClientComponent';
 
 ```
 ## Part 1
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 6
 };
 import { MyModuleClientComponent } from 'my-module/MyModuleClientComponent';
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
 };
 import { NextResponse } from 'next/server';
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 4
 };
 import { ClientComponent } from '../../ClientComponent';
 export { GET };
@@ -316,8 +355,16 @@ export { GET as a } from "__TURBOPACK_VAR__" assert {
 ```
 ## Part 2
 ```js
+import 'next/server';
+
+```
+## Part 3
+```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
 };
 import { NextResponse } from 'next/server';
 export { NextResponse as b } from "__TURBOPACK_VAR__" assert {
@@ -325,10 +372,21 @@ export { NextResponse as b } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 3
+## Part 4
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
+};
+import '../../ClientComponent';
+
+```
+## Part 5
+```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 4
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 4
 };
 import { ClientComponent } from '../../ClientComponent';
 export { ClientComponent as c } from "__TURBOPACK_VAR__" assert {
@@ -336,10 +394,21 @@ export { ClientComponent as c } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 4
+## Part 6
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 4
+};
+import 'my-module/MyModuleClientComponent';
+
+```
+## Part 7
+```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
 };
 import { MyModuleClientComponent } from 'my-module/MyModuleClientComponent';
 export { MyModuleClientComponent as d } from "__TURBOPACK_VAR__" assert {
@@ -347,7 +416,7 @@ export { MyModuleClientComponent as d } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 5
+## Part 8
 ```js
 export { GET } from "__TURBOPACK_PART__" assert {
     __turbopack_part__: "export GET"
@@ -356,9 +425,9 @@ export { GET } from "__TURBOPACK_PART__" assert {
 ```
 ## Merged (module eval)
 ```js
-import 'next/server';
-import '../../ClientComponent';
-import 'my-module/MyModuleClientComponent';
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 6
+};
 "module evaluation";
 
 ```

@@ -116,18 +116,21 @@ graph TD
 # Final
 ```mermaid
 graph TD
-    N0["Items: [ItemId(ModuleEvaluation), ItemId(0, ImportOfModule)]"];
+    N0["Items: [ItemId(ModuleEvaluation)]"];
     N1["Items: [ItemId(Export((&quot;GET&quot;, #2), &quot;GET&quot;)), ItemId(1, VarDeclarator(0))]"];
     N2["Items: [ItemId(Export((&quot;runtime&quot;, #2), &quot;runtime&quot;)), ItemId(2, VarDeclarator(0))]"];
-    N3["Items: [ItemId(0, ImportBinding(0))]"];
-    N1 --> N3;
+    N3["Items: [ItemId(0, ImportOfModule)]"];
+    N4["Items: [ItemId(0, ImportBinding(0))]"];
+    N1 --> N4;
+    N4 --> N3;
+    N0 --> N3;
 ```
 # Entrypoints
 
 ```
 {
     ModuleEvaluation: 0,
-    Exports: 4,
+    Exports: 5,
     Export(
         "runtime",
     ): 2,
@@ -141,14 +144,16 @@ graph TD
 # Modules (dev)
 ## Part 0
 ```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 3
+};
 "module evaluation";
-import "next/server";
 
 ```
 ## Part 1
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 3
 };
 import { NextResponse } from "next/server";
 export { GET };
@@ -173,8 +178,16 @@ export { runtime as b } from "__TURBOPACK_VAR__" assert {
 ```
 ## Part 3
 ```js
+import "next/server";
+
+```
+## Part 4
+```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 3
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 3
 };
 import { NextResponse } from "next/server";
 export { NextResponse as c } from "__TURBOPACK_VAR__" assert {
@@ -182,7 +195,7 @@ export { NextResponse as c } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 4
+## Part 5
 ```js
 export { GET } from "__TURBOPACK_PART__" assert {
     __turbopack_part__: "export GET"
@@ -194,7 +207,9 @@ export { runtime } from "__TURBOPACK_PART__" assert {
 ```
 ## Merged (module eval)
 ```js
-import "next/server";
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 3
+};
 "module evaluation";
 
 ```
@@ -203,7 +218,7 @@ import "next/server";
 ```
 {
     ModuleEvaluation: 0,
-    Exports: 4,
+    Exports: 5,
     Export(
         "runtime",
     ): 2,
@@ -217,14 +232,16 @@ import "next/server";
 # Modules (prod)
 ## Part 0
 ```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 3
+};
 "module evaluation";
-import "next/server";
 
 ```
 ## Part 1
 ```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 3
 };
 import { NextResponse } from "next/server";
 export { GET };
@@ -249,8 +266,16 @@ export { runtime as b } from "__TURBOPACK_VAR__" assert {
 ```
 ## Part 3
 ```js
+import "next/server";
+
+```
+## Part 4
+```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 3
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 3
 };
 import { NextResponse } from "next/server";
 export { NextResponse as c } from "__TURBOPACK_VAR__" assert {
@@ -258,7 +283,7 @@ export { NextResponse as c } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 4
+## Part 5
 ```js
 export { GET } from "__TURBOPACK_PART__" assert {
     __turbopack_part__: "export GET"
@@ -270,7 +295,9 @@ export { runtime } from "__TURBOPACK_PART__" assert {
 ```
 ## Merged (module eval)
 ```js
-import "next/server";
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 3
+};
 "module evaluation";
 
 ```

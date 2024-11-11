@@ -69,10 +69,13 @@ graph TD
 # Final
 ```mermaid
 graph TD
-    N0["Items: [ItemId(ModuleEvaluation), ItemId(0, ImportOfModule)]"];
+    N0["Items: [ItemId(ModuleEvaluation)]"];
     N1["Items: [ItemId(Export((&quot;__TURBOPACK__reexport__cat__&quot;, #3), &quot;fakeCat&quot;))]"];
-    N2["Items: [ItemId(0, ImportBinding(0))]"];
-    N1 --> N2;
+    N2["Items: [ItemId(0, ImportOfModule)]"];
+    N3["Items: [ItemId(0, ImportBinding(0))]"];
+    N1 --> N3;
+    N0 --> N2;
+    N3 --> N2;
 ```
 # Entrypoints
 
@@ -82,7 +85,7 @@ graph TD
     Export(
         "fakeCat",
     ): 1,
-    Exports: 3,
+    Exports: 4,
 }
 ```
 
@@ -90,22 +93,32 @@ graph TD
 # Modules (dev)
 ## Part 0
 ```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
+};
 "module evaluation";
-import "./lib";
 
 ```
 ## Part 1
 ```js
 import { a as __TURBOPACK__reexport__cat__ } from "__TURBOPACK_PART__" assert {
-    __turbopack_part__: -2
+    __turbopack_part__: -3
 };
 export { __TURBOPACK__reexport__cat__ as fakeCat };
 
 ```
 ## Part 2
 ```js
+import "./lib";
+
+```
+## Part 3
+```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
 };
 import { cat as __TURBOPACK__reexport__cat__ } from "./lib";
 export { __TURBOPACK__reexport__cat__ as a } from "__TURBOPACK_VAR__" assert {
@@ -113,7 +126,7 @@ export { __TURBOPACK__reexport__cat__ as a } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 3
+## Part 4
 ```js
 export { fakeCat } from "__TURBOPACK_PART__" assert {
     __turbopack_part__: "export fakeCat"
@@ -122,7 +135,9 @@ export { fakeCat } from "__TURBOPACK_PART__" assert {
 ```
 ## Merged (module eval)
 ```js
-import "./lib";
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
+};
 "module evaluation";
 
 ```
@@ -134,7 +149,7 @@ import "./lib";
     Export(
         "fakeCat",
     ): 1,
-    Exports: 3,
+    Exports: 4,
 }
 ```
 
@@ -142,22 +157,32 @@ import "./lib";
 # Modules (prod)
 ## Part 0
 ```js
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
+};
 "module evaluation";
-import "./lib";
 
 ```
 ## Part 1
 ```js
 import { a as __TURBOPACK__reexport__cat__ } from "__TURBOPACK_PART__" assert {
-    __turbopack_part__: -2
+    __turbopack_part__: -3
 };
 export { __TURBOPACK__reexport__cat__ as fakeCat };
 
 ```
 ## Part 2
 ```js
+import "./lib";
+
+```
+## Part 3
+```js
 import "__TURBOPACK_PART__" assert {
-    __turbopack_part__: 0
+    __turbopack_part__: 2
+};
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
 };
 import { cat as __TURBOPACK__reexport__cat__ } from "./lib";
 export { __TURBOPACK__reexport__cat__ as a } from "__TURBOPACK_VAR__" assert {
@@ -165,7 +190,7 @@ export { __TURBOPACK__reexport__cat__ as a } from "__TURBOPACK_VAR__" assert {
 };
 
 ```
-## Part 3
+## Part 4
 ```js
 export { fakeCat } from "__TURBOPACK_PART__" assert {
     __turbopack_part__: "export fakeCat"
@@ -174,7 +199,9 @@ export { fakeCat } from "__TURBOPACK_PART__" assert {
 ```
 ## Merged (module eval)
 ```js
-import "./lib";
+import "__TURBOPACK_PART__" assert {
+    __turbopack_part__: 2
+};
 "module evaluation";
 
 ```
