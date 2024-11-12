@@ -44,6 +44,7 @@ const ANIMATABLE_TYPES = [WEBP, PNG, GIF]
 const VECTOR_TYPES = [SVG]
 const BLUR_IMG_SIZE = 8 // should match `next-image-loader`
 const BLUR_QUALITY = 70 // should match `next-image-loader`
+const INVALID_URL_REGEX = /^[/\\]{3,}/
 
 let _sharp: typeof import('sharp')
 
@@ -238,6 +239,10 @@ export class ImageOptimizerCache {
       return {
         errorMessage: '"url" parameter cannot be a protocol-relative URL (//)',
       }
+    }
+
+    if (INVALID_URL_REGEX.test(url)) {
+      return { errorMessage: '"url" parameter is invalid' }
     }
 
     let isAbsolute: boolean
