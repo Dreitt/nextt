@@ -21,7 +21,7 @@ use swc_core::{
     },
 };
 use tracing::Instrument;
-use turbo_tasks::{util::WrapFuture, RcStr, Value, ValueToString, Vc};
+use turbo_tasks::{util::WrapFuture, RcStr, ResolvedVc, Value, ValueToString, Vc};
 use turbo_tasks_fs::{FileContent, FileSystemPath};
 use turbo_tasks_hash::hash_xxh3_hash64;
 use turbopack_core::{
@@ -188,7 +188,7 @@ async fn parse_internal(
         Err(error) => {
             let error: RcStr = PrettyPrintError(&error).to_string().into();
             ReadSourceIssue {
-                source,
+                source: source.to_resolved().await?,
                 error: error.clone(),
             }
             .cell()
@@ -230,7 +230,7 @@ async fn parse_internal(
                 Err(error) => {
                     let error: RcStr = PrettyPrintError(&error).to_string().into();
                     ReadSourceIssue {
-                        source,
+                        source: source.to_resolved().await?,
                         error: error.clone(),
                     }
                     .cell()
@@ -395,7 +395,7 @@ async fn parse_file_content(
                 file_path_str: &fs_path.path,
                 file_name_str: fs_path.file_name(),
                 file_name_hash: file_path_hash,
-                file_path: fs_path_vc,
+                file_path: fs_path_vc.to_resolved().await?,
             };
             let span = tracing::trace_span!("transforms");
             async {
@@ -466,7 +466,7 @@ async fn parse_file_content(
 
 #[turbo_tasks::value]
 struct ReadSourceIssue {
-    source: Vc<Box<dyn Source>>,
+    source: ResolvedVc<Box<dyn Source>>,
     error: RcStr,
 }
 

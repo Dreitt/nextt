@@ -25,7 +25,7 @@ use swc_core::{
         atoms::{Atom, JsWord},
     },
 };
-use turbo_tasks::{FxIndexMap, FxIndexSet, RcStr, Vc};
+use turbo_tasks::{FxIndexMap, FxIndexSet, RcStr, ResolvedVc, Vc};
 use turbopack_core::compile_time_info::{
     CompileTimeDefineValue, DefineableNameSegment, FreeVarReference,
 };
@@ -3788,9 +3788,9 @@ pub enum WellKnownFunctionKind {
     Require,
     RequireResolve,
     RequireContext,
-    RequireContextRequire(Vc<RequireContextValue>),
-    RequireContextRequireKeys(Vc<RequireContextValue>),
-    RequireContextRequireResolve(Vc<RequireContextValue>),
+    RequireContextRequire(ResolvedVc<RequireContextValue>),
+    RequireContextRequireKeys(ResolvedVc<RequireContextValue>),
+    RequireContextRequireResolve(ResolvedVc<RequireContextValue>),
     Define,
     FsReadMethod(JsWord),
     PathToFileUrl,
@@ -3837,7 +3837,7 @@ fn is_unresolved_id(i: &Id, unresolved_mark: Mark) -> bool {
 #[doc(hidden)]
 pub mod test_utils {
     use anyhow::Result;
-    use turbo_tasks::{FxIndexMap, Vc};
+    use turbo_tasks::{FxIndexMap, ResolvedVc, Vc};
     use turbopack_core::{compile_time_info::CompileTimeInfo, error::PrettyPrintError};
 
     use super::{
@@ -3899,7 +3899,7 @@ pub mod test_utils {
                     map.insert("./c".into(), format!("[context: {}]/c", options.dir).into());
 
                     JsValue::WellKnownFunction(WellKnownFunctionKind::RequireContextRequire(
-                        Vc::cell(map),
+                        ResolvedVc::cell(map),
                     ))
                 }
                 Err(err) => v.into_unknown(true, PrettyPrintError(&err).to_string()),
