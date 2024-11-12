@@ -1,15 +1,14 @@
 import type { Options as SWCOptions } from '@swc/core'
 import type { CompilerOptions } from 'typescript'
-import { join } from 'node:path'
+import { resolve } from 'node:path'
 import { readFile } from 'node:fs/promises'
 import { deregisterHook, registerHook, requireFromString } from './require-hook'
-import { parseJsonFile } from '../load-jsconfig'
+import { lazilyGetTSConfig } from './utils'
 
 function resolveSWCOptions(
   cwd: string,
   compilerOptions: CompilerOptions
 ): SWCOptions {
-  const resolvedBaseUrl = join(cwd, compilerOptions.baseUrl ?? '.')
   return {
     jsc: {
       target: 'es5',
@@ -17,28 +16,15 @@ function resolveSWCOptions(
         syntax: 'typescript',
       },
       paths: compilerOptions.paths,
-      baseUrl: resolvedBaseUrl,
+      // SWC requires `baseUrl` to be passed when `paths` are used.
+      // Also, `baseUrl` must be absolute.
+      baseUrl: resolve(cwd, compilerOptions.baseUrl ?? ''),
     },
     module: {
       type: 'commonjs',
     },
     isModule: 'unknown',
   } satisfies SWCOptions
-}
-
-async function lazilyGetTSConfig(cwd: string) {
-  let tsConfig: { compilerOptions: CompilerOptions }
-  try {
-    tsConfig = parseJsonFile(join(cwd, 'tsconfig.json'))
-  } catch (error) {
-    // ignore if tsconfig.json does not exist
-    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
-      throw error
-    }
-    tsConfig = { compilerOptions: {} }
-  }
-
-  return tsConfig
 }
 
 export async function transpileConfig({
@@ -50,7 +36,7 @@ export async function transpileConfig({
 }) {
   let hasRequire = false
   try {
-    const { compilerOptions } = await lazilyGetTSConfig(cwd)
+    const { compilerOptions } = lazilyGetTSConfig(cwd)
     const swcOptions = resolveSWCOptions(cwd, compilerOptions)
 
     const nextConfigString = await readFile(nextConfigPath, 'utf8')
@@ -66,7 +52,7 @@ export async function transpileConfig({
     }
 
     // filename & extension don't matter here
-    return requireFromString(code, join(cwd, 'next.config.compiled.js'))
+    return requireFromString(code, resolve(cwd, 'next.config.compiled.js'))
   } catch (error) {
     throw error
   } finally {
