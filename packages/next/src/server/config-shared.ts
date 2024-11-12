@@ -481,11 +481,6 @@ export interface ExperimentalConfig {
   serverMinification?: boolean
 
   /**
-   * Enables source maps generation for the server production bundle.
-   */
-  serverSourceMaps?: boolean
-
-  /**
    * @internal Used by the Next.js internals only.
    */
   trustHostHeader?: boolean
@@ -974,6 +969,11 @@ export interface NextConfig extends Record<string, any> {
    */
   outputFileTracingIncludes?: Record<string, string[]>
 
+  /**
+   * Enables source maps generation for the server production bundle.
+   */
+  serverSourceMaps?: boolean
+
   watchOptions?: {
     pollIntervalMs?: number
   }
@@ -1035,6 +1035,7 @@ export const defaultConfig: NextConfig = {
   output: !!process.env.NEXT_PRIVATE_STANDALONE ? 'standalone' : undefined,
   modularizeImports: undefined,
   outputFileTracingRoot: process.env.NEXT_PRIVATE_OUTPUT_TRACE_ROOT || '',
+  serverSourceMaps: false,
   experimental: {
     cacheLife: {
       default: {
@@ -1087,7 +1088,6 @@ export const defaultConfig: NextConfig = {
       : undefined,
     prerenderEarlyExit: true,
     serverMinification: true,
-    serverSourceMaps: false,
     linkNoTouchStart: false,
     caseSensitiveRoutes: false,
     appDocumentPreloading: undefined,
