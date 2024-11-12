@@ -559,6 +559,7 @@ async fn process_content(
                 },
                 dashed_idents: false,
                 grid: false,
+                container: false,
                 ..Default::default()
             }),
 
@@ -592,6 +593,8 @@ async fn process_content(
                         }
                     }
 
+                    let mut has_errors = false;
+
                     for err in warnings.read().unwrap().iter() {
                         match err.kind {
                             lightningcss::error::ParserError::UnexpectedToken(_)
@@ -613,13 +616,18 @@ async fn process_content(
                                 }
                                 .cell()
                                 .emit();
-                                return Ok(ParseCssResult::Unparseable.cell());
+
+                                has_errors = true;
                             }
 
                             _ => {
                                 // Ignore
                             }
                         }
+                    }
+
+                    if has_errors {
+                        return Ok(ParseCssResult::Unparseable.cell());
                     }
 
                     stylesheet_into_static(&ss, without_warnings(config.clone()))
@@ -1150,6 +1158,7 @@ mod tests {
                     pattern: Pattern::default(),
                     dashed_idents: false,
                     grid: false,
+                    container: false,
                     ..Default::default()
                 }),
                 ..Default::default()
